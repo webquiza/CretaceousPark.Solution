@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using CretaceousPark.Models;
 
+
 namespace CretaceousPark
 {
     public class Startup
@@ -24,6 +25,8 @@ namespace CretaceousPark
             services.AddDbContext<CretaceousParkContext>(opt =>
                 opt.UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultConnection"])));
             services.AddControllers();
+            // services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -32,6 +35,8 @@ namespace CretaceousPark
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
             // app.UseHttpsRedirection();
