@@ -9,13 +9,14 @@ using CretaceousPark.Models;
 
 namespace CretaceousPark.Controllers
 {
-  [Route("api/[controller]")]
+  [ApiVersion("1.0")]
+  [Route("api/animals")]
   [ApiController]
-  public class AnimalsController : ControllerBase
+  public class AnimalsV1Controller : ControllerBase
   {
     private readonly CretaceousParkContext _db;
 
-    public AnimalsController(CretaceousParkContext db)
+    public AnimalsV1Controller(CretaceousParkContext db)
     {
       _db = db;
     }
@@ -125,4 +126,45 @@ namespace CretaceousPark.Controllers
 
     
   }
+  
+  [ApiVersion("2.0")]
+  [Route("api/animals")]
+  [ApiController]
+  public class AnimalsV2Controller : ControllerBase
+  {
+    private readonly CretaceousParkContext _db;
+
+    public AnimalsV2Controller(CretaceousParkContext db)
+    {
+      _db = db;
+    }
+
+    // GET: api/Animals
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Animal>>> Get(string species, string gender, string name, int pageNumber)
+    {
+      var query = _db.Animals.AsQueryable();
+      if (pageNumber != 0)
+      {
+        query = query.Where(entry => entry.PageNumber == pageNumber);
+      }
+      if (species != null)
+      {
+        query = query.Where(entry => entry.Species == species);
+      }
+
+      if (gender != null)
+      {
+        query = query.Where(entry => entry.Gender == gender);
+      }    
+
+      if (name != null)
+      {
+        query = query.Where(entry => entry.Name == name);
+      }      
+
+      return await query.ToListAsync();
+    }
+  }
+
 }
