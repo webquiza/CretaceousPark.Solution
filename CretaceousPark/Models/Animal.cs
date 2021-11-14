@@ -15,5 +15,6 @@ namespace CretaceousPark.Models
         public int Age { get; set; }
         [Required]
         public string Gender { get; set; }
+        public int PageNumber{get; set;}
     }
 }
